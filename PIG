@@ -1,0 +1,104 @@
+ClrHome
+
+Disp "PIG, A JEOPARDY DICE GAME"
+Disp ""
+Disp "RACE TO 100 POINTS BY"
+Disp "ROLLING DIE REPEATEDLY"
+Disp "DURRING YOUR TURN. TURNS"
+Disp "ALTERNATE WHEN YOU HOLD"
+Disp "OR ROLL A 1 (PIG)."
+Disp ""
+Disp "PRESS ENTER"
+Pause
+
+Lbl 0
+
+Menu("BE PLAYER 1 OR 2?","1",1,"2",2,"EXIT",4)
+Lbl 1
+    1->H
+    Goto 3
+Lbl 2
+    2->H
+
+Lbl 3
+ClrHome
+
+2->C
+
+0->U
+0->O
+
+While U<100 and O<100
+
+    (3-C)->C
+
+    If C=H
+    Then
+        Disp "YOUR TURN"
+        0->T
+        1->B
+        While T+U<100 and B
+            Input "1 TO ROLL, * TO HOLD: ",I
+            If I=1
+            Then
+                randInt(1,6)->R
+                If R=1
+                Then
+                    Disp "YOU ROLL PIG! (T:0)"
+                    Disp "PRESS ENTER"
+                    Pause
+                    0->T
+                    0->B
+                Else
+                    (T+R)->T
+                    Disp "YOU ROLL "+toString(R)+" (T:"+toString(T)+")"
+                End
+            Else
+                0->B
+            End
+        End
+        (U+T)->U
+    Else
+        Disp "COMPUTER'S TURN"
+        0->T
+        1->B
+        While O+T<100 and B
+            If U>71 or O>71 or T<21+round((U-O)/8)
+            Then
+                randInt(1,6)->R
+                If R=1
+                Then
+                    Disp "COMPUTER ROLLS PIG! (T:0)"
+                    0->T
+                    0->B
+                Else
+                    (T+R)->T
+                    Disp "COMPUTER ROLLS "+toString(R)+" (T:"+toString(T)+")"
+                End
+            Else
+                Disp "COMPUTER HOLDS"
+                0->B
+            End
+        End
+        (O+T)->O
+    End
+
+    Disp "----COMPUTER SCORE: "+toString(O)
+    Disp "----YOUR SCORE: "+toString(U)
+End
+
+If C=H
+Then
+    Disp "YOU WIN!"
+Else
+    Disp "COMPUTER WINS!"
+End
+
+Disp ""
+Disp "PRESS ENTER"
+
+Pause
+
+Menu("PLAY AGAIN?","YES",0,"NO",4)
+Lbl 4
+ClrHome
